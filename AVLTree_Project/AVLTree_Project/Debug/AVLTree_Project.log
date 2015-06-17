@@ -1,17 +1,14 @@
-﻿生成启动时间为 2015/6/11 1:16:25。
-     1>项目“C:\Users\cposture\Desktop\AVLTree\AVLTree_Project\AVLTree_Project\AVLTree_Project.vcxproj”在节点 2 上(Build 个目标)。
+﻿生成启动时间为 2015/6/15 23:28:20。
+     1>项目“E:\M_Project\AVLTree\AVLTree_Project\AVLTree_Project\AVLTree_Project.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
-         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /analyze- /errorReport:prompt AVLTree.c
-         AVLTree.c
-     1>c:\users\cposture\desktop\avltree\avltree_project\avltree_project\avltree.c(36): warning C4013: “free”未定义；假设外部返回 int
-     1>c:\users\cposture\desktop\avltree\avltree_project\avltree_project\avltree.c(79): warning C4013: “malloc”未定义；假设外部返回 int
-     1>c:\users\cposture\desktop\avltree\avltree_project\avltree_project\avltree.c(95): warning C4047: “函数”:“AVLTreePtr *”与“AVLTreeNode *”的间接级别不同
-     1>c:\users\cposture\desktop\avltree\avltree_project\avltree_project\avltree.c(95): warning C4024: “insertAVLTree”: 形参和实参 1 的类型不同
-     1>c:\users\cposture\desktop\avltree\avltree_project\avltree_project\avltree.c(102): warning C4013: “leftBalance”未定义；假设外部返回 int
-     1>c:\users\cposture\desktop\avltree\avltree_project\avltree_project\avltree.c(103): warning C4047: “=”:“Status *”与“int”的间接级别不同
-     1>c:\users\cposture\desktop\avltree\avltree_project\avltree_project\avltree.c(107): error C2143: 语法错误 : 缺少“;”(在“}”的前面)
-     1>已完成生成项目“C:\Users\cposture\Desktop\AVLTree\AVLTree_Project\AVLTree_Project\AVLTree_Project.vcxproj”(Build 个目标)的操作 - 失败。
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /analyze- /errorReport:prompt AVLTree_Project.c
+         AVLTree_Project.c
+       Link:
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\M_Project\AVLTree\AVLTree_Project\Debug\AVLTree_Project.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:\M_Project\AVLTree\AVLTree_Project\Debug\AVLTree_Project.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\M_Project\AVLTree\AVLTree_Project\Debug\AVLTree_Project.lib" /MACHINE:X86 Debug\AVLTree.obj
+         Debug\AVLTree_Project.obj
+         AVLTree_Project.vcxproj -> E:\M_Project\AVLTree\AVLTree_Project\Debug\AVLTree_Project.exe
+     1>已完成生成项目“E:\M_Project\AVLTree\AVLTree_Project\AVLTree_Project\AVLTree_Project.vcxproj”(Build 个目标)的操作。
 
-生成失败。
+生成成功。
 
-已用时间 00:00:01.05
+已用时间 00:00:00.51

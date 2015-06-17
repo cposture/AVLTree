@@ -27,7 +27,8 @@
 *	Include File Section
 **************************************************************/
 #include "AVLTree.h"
-
+#include <stdlib.h>
+#include <stdio.h>
 /**************************************************************
 *	Macro Define Section
 **************************************************************/
@@ -43,9 +44,11 @@
 **************************************************************/
 static void R_Rotate(AVLTreePtr *p);
 static void L_Rotate(AVLTreePtr *p);
-static Status  insertAVLTree_Interface(AVLTreePtr *t, RcdType elem, Status *taller);
 static void leftBalance(AVLTreePtr *p);
 static void rightBalance(AVLTreePtr *p);
+static Status  insertAVLTree_Interface(AVLTreePtr *t, RcdType elem, Status *taller);
+static Status  deleteAVLTree_Interface(AVLTreePtr *t, KeyType key, Status *shorter);
+static Status  traverseInorderAVLTree(AVLTreePtr t, Status(*visit)(RcdType *));
 /**************************************************************
 *	Global Variable Declare Section
 **************************************************************/
@@ -90,8 +93,9 @@ Status  destroyAVLTree(AVLTreePtr *t)
         destroyAVLTree(&(*t)->rchild);
         free(*t);
         *t = NULL;
+        return TRUE;
     }
-    return TRUE;
+    return FALSE;
 }
 
 /**
@@ -126,10 +130,40 @@ AVLTreePtr  searchAVLTree(AVLTreePtr t, KeyType key)
 *	Precondition...:
 *	Postcondition..:    若插入成功，*t将指向一棵插入了新结点的平衡二叉树；若插入失败，*t（平衡二叉树)不会改变
 **/
-Status  insertAVLTree_Interface(AVLTreePtr *t, RcdType elem)
+Status  insertAVLTree(AVLTreePtr *t, RcdType elem)
 {
     Status  taller;
     return insertAVLTree_Interface(t, elem, &taller);
+}
+
+/**
+*	Name...........:    Status  deleteAVLTree(AVLTreePtr *t, KeyType key);
+*	Description....:	在平衡二叉树删除指定关键字
+*	Param..........:	t：指向平衡二叉树指针的指针
+key：要删除的指定关键字
+*	Return.........:    TRUE：删除成功
+FALSE：删除失败
+*	Precondition...:
+*	Postcondition..:    若删除成功，*t将指向一棵删除了结点的平衡二叉树；若删除失败，*t（平衡二叉树)不会改变
+**/
+Status  deleteAVLTree(AVLTreePtr *t, KeyType key)
+{
+    Status shorter;
+    return deleteAVLTree_Interface(t, key, &shorter);
+}
+
+/**
+*	Name...........:    Status  traverseAVLTree(AVLTreePtr t, void(*visit)(RcdType *));
+*	Description....:	中序遍历平衡二叉树
+*	Param..........:	t：指向平衡二叉树指针的指针
+visit：用户指定的访问函数
+*	Return.........:
+*	Precondition...:
+*	Postcondition..:    树的结点的内容会被visit函数改变，但树的结构不改变
+**/
+Status  traverseAVLTree(AVLTreePtr t, Status(*visit)(RcdType *))
+{
+    return traverseInorderAVLTree(t, visit);
 }
 
 /**
@@ -184,6 +218,32 @@ int getNumberOfNodes_AVLTree(AVLTreePtr t)
 }
 
 /**
+*	Name...........:    void printAVLTree(AVLTreePtr p);
+*	Description....:	以嵌套列表形式向控制台打印一棵树
+*	Param..........:	p：平衡二叉树指针
+*	Return.........:    
+*	Precondition...:
+*	Postcondition..:    成功，则控制台会显示树的嵌套列表
+**/
+void printAVLTree(AVLTreePtr p)
+{
+    if (NULL == p)
+    {
+        printf("#");
+        return;
+    }    
+    printf("%d", p->data.key);
+    if (NULL != p->lchild || NULL != p->rchild)
+    {
+        printf("(");
+        printAVLTree(p->lchild);
+        printf(",");
+        printAVLTree(p->rchild);
+        printf(")");
+    }
+}
+
+/**
 *	Name...........:    static Status  insertAVLTree_Interface(AVLTreePtr *t, RcdType elem, Status *taller);
 *	Description....:	在平衡二叉树插入指定元素
 *	Param..........:	t：指向平衡二叉树指针的指针
@@ -214,7 +274,7 @@ static Status  insertAVLTree_Interface(AVLTreePtr *t, RcdType elem, Status *tall
     }
     else if (elem.key < (*t)->data.key) //elem值比根结点小，则插入到左子树
     {
-        if (FALSE == insertAVLTree_Interface((*t)->rchild, elem, taller))
+        if (FALSE == insertAVLTree_Interface(&((*t)->lchild), elem, taller))
             return FALSE;
         if (TRUE == *taller)
         {
@@ -237,7 +297,7 @@ static Status  insertAVLTree_Interface(AVLTreePtr *t, RcdType elem, Status *tall
     }
     else if (elem.key > (*t)->data.key) //elem值比根结点大，则插入到右子树
     {
-        if (FALSE == insertAVLTree_Interface((*t)->rchild, elem, taller))
+        if (FALSE == insertAVLTree_Interface(&((*t)->rchild), elem, taller))
             return FALSE;
         if (TRUE == *taller)
         {
@@ -261,6 +321,122 @@ static Status  insertAVLTree_Interface(AVLTreePtr *t, RcdType elem, Status *tall
     return TRUE;
 }
 
+/**
+*	Name...........:    static Status  deleteAVLTree_Interface(AVLTreePtr *t, KeyType key, Status *shorter);
+*	Description....:	在平衡二叉树删除指定关键字
+*	Param..........:	t：指向平衡二叉树指针的指针
+                        key：要删除的指定关键字
+                        shorter：标志值，调用此函数只需传入一个类型为Status的任意值变量即可
+*	Return.........:    TRUE：删除成功
+                        FALSE：删除失败
+*	Precondition...:
+*	Postcondition..:    若删除成功，*t将指向一棵删除了结点的平衡二叉树；若删除失败，*t（平衡二叉树)不会改变
+**/
+static Status  deleteAVLTree_Interface(AVLTreePtr *t, KeyType key, Status *shorter)
+{
+    AVLTreePtr p,q;
+
+    if (NULL == *t)
+        return FALSE;
+    if (key == (*t)->data.key)
+    {
+        *shorter = TRUE;
+        if (NULL != (*t)->lchild && NULL != (*t)->rchild)
+        {
+            p = (*t);
+            q = p->lchild;
+            //循环不变量：p是q的前驱
+            while (NULL != q->rchild)
+            {
+                p = q;
+                q = q->rchild;
+            }
+            //q指向待删结点，为左子树最大值
+            (*t)->data = q->data;
+            if (p != *t)
+                p->rchild = q->lchild;  //重接p的右子树
+            else
+                p->lchild = q->lchild;  //重接p的左子树
+            free(q);
+        }
+        else    //此结点小于2个孩子
+        {
+            p = *t;
+            if (NULL != p->lchild)
+                *t = (*t)->lchild;
+            else
+                *t = (*t)->rchild;
+            free(p);
+        }
+    }
+    else if (key < (*t)->data.key)
+    {
+        if (FALSE == deleteAVLTree_Interface(&((*t)->lchild), key, shorter))
+            return FALSE;
+        if (TRUE == *shorter)
+        {
+            switch ((*t)->bf)
+            {
+            case LH:
+                (*t)->bf = EH;  //原左高后等高
+                *shorter = TRUE;//总体高度小1
+                break;
+            case EH:
+                (*t)->bf = RH;  //原等高后右高
+                *shorter = FALSE;//高度总体不变
+                break;
+            case RH:    //LR型
+                leftBalance(t);
+                *shorter = FALSE;
+                break;
+            }
+        }
+    }
+    else
+    {
+        if (FALSE == deleteAVLTree_Interface(&((*t)->rchild), key, shorter))
+            return FALSE;
+        if (TRUE == *shorter)
+        {
+            switch ((*t)->bf)
+            {
+            case LH:
+                rightBalance(t);
+                *shorter = FALSE;
+                break;
+            case EH:
+                (*t)->bf = LH;
+                *shorter = FALSE;//高度总体不变
+                break;
+            case RH:
+                (*t)->bf = EH;
+                *shorter = TRUE;//总体高度小1
+                break;
+            }
+        }
+    }
+    return  TRUE;
+}
+
+/**
+*	Name...........:    static Status  traverseInorderAVLTree(AVLTreePtr t, Status (*visit)(RcdType *));
+*	Description....:	中序遍历平衡二叉树
+*	Param..........:	t：指向平衡二叉树指针的指针
+                        visit：用户指定的访问函数
+*	Return.........:
+*	Precondition...:
+*	Postcondition..:    树的结点的内容会被visit函数改变，但树的结构不改变
+**/
+static Status  traverseInorderAVLTree(AVLTreePtr t, Status (*visit)(RcdType *))
+{
+    if (NULL == t)
+        return  TRUE;
+    if (FALSE == traverseInorderAVLTree(t->lchild, visit))
+        return FALSE;
+    if(FALSE == visit(&(t->data)))
+        return FALSE;
+    return traverseInorderAVLTree(t->rchild, visit);
+}
 /**
 *	Name...........:    static void R_Rotate(AVLTreePtr *p);
 *	Description....:	LL型失衡二叉树的右旋调整（顺时针）
@@ -299,6 +475,7 @@ static void L_Rotate(AVLTreePtr *p)
 
     rc = (*p)->rchild;  //rc先连接p的右孩子
     (*p)->rchild = rc->lchild; //p的右孩子的左孩子断开，连接p的右孩子
+    rc->lchild = *p;
     *p = rc; //rc成为p的新根
 }
 

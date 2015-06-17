@@ -80,7 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AVLTree.c" />
-    <ClCompile Include="AVLTree_Project.cpp" />
+    <ClCompile Include="AVLTree_Project.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AVLTree.h" />

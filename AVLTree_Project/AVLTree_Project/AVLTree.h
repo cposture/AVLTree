@@ -121,8 +121,18 @@ Status  insertAVLTree(AVLTreePtr *t, RcdType elem);
 *	Precondition...:
 *	Postcondition..:    若删除成功，*t将指向一棵删除了结点的平衡二叉树；若删除失败，*t（平衡二叉树)不会改变
 **/
-
 Status  deleteAVLTree(AVLTreePtr *t, KeyType key);
+
+/**
+*	Name...........:    Status  traverseAVLTree(AVLTreePtr t, Status(*visit)(RcdType *));
+*	Description....:	遍历平衡二叉树
+*	Param..........:	t：指向平衡二叉树指针的指针
+                        visit：用户指定的访问函数
+*	Return.........:    
+*	Precondition...:
+*	Postcondition..:    树的结点的内容会被visit函数改变，但树的结构不改变
+**/
+Status  traverseAVLTree(AVLTreePtr t, Status(*visit)(RcdType *));
 
 /**
 *	Name...........:    Status isEmpty_AVLTree(AVLTreePtr t);
@@ -154,6 +164,16 @@ int getHeight_AVLTree(AVLTreePtr t);
 *	Postcondition..:
 **/
 int getNumberOfNodes_AVLTree(AVLTreePtr t);
+
+/**
+*	Name...........:    void printAVLTree(AVLTreePtr p);
+*	Description....:	以嵌套列表形式向控制台打印一棵树
+*	Param..........:	p：平衡二叉树指针
+*	Return.........:
+*	Precondition...:
+*	Postcondition..:    成功，则控制台会显示树的嵌套列表
+**/
+void printAVLTree(AVLTreePtr p);
 /**************************************************************
 *	End-Multi-Include-Prevent Section
 **************************************************************/

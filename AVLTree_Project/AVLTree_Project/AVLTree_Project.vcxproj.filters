@@ -18,10 +18,10 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AVLTree_Project.cpp">
+    <ClCompile Include="AVLTree.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="AVLTree.c">
+    <ClCompile Include="AVLTree_Project.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
